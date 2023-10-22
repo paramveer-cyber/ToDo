@@ -60,3 +60,9 @@
     text-decoration: none;
     font-size: larger;
 }
+
+.checked {
+    text-decoration: line-through;
+    color: #999;
+}
+  

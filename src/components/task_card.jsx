@@ -25,6 +25,7 @@ export default function TaskCard(props) {
         }
     };
 
+
     return (
         <div className='task_card'>
             <div className="content">
@@ -36,6 +37,7 @@ export default function TaskCard(props) {
                     checked={props.isChecked}
                     onChange={props.handleCheckboxChange} // Handle checkbox change event
                 />
+
 
                 <label className={'btn btn-outline-success'} htmlFor={`btn-check-outlined${props.unique_key}`}>✓</label>
                 {isEditing ? (
@@ -50,12 +52,13 @@ export default function TaskCard(props) {
                     />
                 ) : (
                     <label
-                        className={`form-check-label task ${props.titleClassName}`}
+                        className={`form-check-label task ${props.titleClassName} ${props.isChecked ? 'checked' : ''}`}
                         htmlFor={`btn-check-outlined${props.unique_key}`}
                         onDoubleClick={handleEditClick}
                     >
                         {props.title}
                     </label>
+
                 )}
             </div>
             <div className="functions">

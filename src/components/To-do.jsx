@@ -10,7 +10,7 @@ const socket = io("https://charm-numerous-farmhouse.glitch.me/", { transports: [
 
 
 export default function ToDo() {
-    const {isAuthenticated, user} = useAuthFunctions()
+    const { isAuthenticated, user } = useAuthFunctions()
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
     const [Token, setToken] = useState("");
@@ -23,59 +23,73 @@ export default function ToDo() {
     useEffect(() => {
         setAccessData(false)
         socket.emit('givetoken');
-        if (!isAuthenticated){
-        const storedTasks = JSON.parse(localStorage.getItem('tasks'));
-        if (storedTasks && storedTasks.length > 0) {
-            setTasks(storedTasks);
-        }}
+        if (!isAuthenticated) {
+            const storedTasks = JSON.parse(localStorage.getItem('tasks'));
+            if (storedTasks && storedTasks.length > 0) {
+                setTasks(storedTasks);
+            }
+        }
     }, [isAuthenticated]);
-    
+
     const handleInputChange = (event) => {
         setNewTask(event.target.value);
     };
-    
+
     const handleKeyPress = (event) => {
         if (event.key === 'Enter' && newTask.trim() !== '') {
             const newTaskObject = {
                 id: uuid(),
                 title: newTask.trim(),
+                isChecked: false, // Default value for isChecked is set to false
             };
             setTasks([...tasks, newTaskObject]);
             setNewTask("");
         }
-        
     };
-    
+
+
     const handleDelete = (uniqueKey) => {
         const updatedTasks = tasks.filter((task) => task.id !== uniqueKey);
         setTasks(updatedTasks);
     };
-    
+
     const handleModification = (key, m_title) => {
-        setTasks(prevTasks => {
-            const updatedTasks = prevTasks.map((task, index) => {
+        setTasks((prevTasks) => {
+            const updatedTasks = prevTasks.map((task) => {
                 if (task.id === key) {
-                    return { id:task.id, title: m_title };
+                    return { ...task, title: m_title }; // Update the title and isChecked properties
                 }
                 return task;
             });
-            console.log(key)
             return updatedTasks;
         });
     };
-    
-    const UpdateUserMetadata = useCallback((updatedTasks)=>{
-        if (isAuthenticated && AccessData){
-            console.log("UpdatedTasks: ", updatedTasks)
+
+
+    const handleCheckboxChange = (uniqueKey) => {
+        setTasks((prevTasks) => {
+            const updatedTasks = prevTasks.map((task) => {
+                if (task.id === uniqueKey) {
+                    return { ...task, isChecked: !task.isChecked }; // Toggle the isChecked property
+                }
+                return task;
+            });
+            return updatedTasks;
+        });
+        UpdateUserMetadata(tasks);
+    };
+
+    const UpdateUserMetadata = useCallback((updatedTasks) => {
+        if (isAuthenticated && AccessData) {
             socket.emit("updateData", [user['sub'], Token, updatedTasks])
         }
     }, [isAuthenticated, user, Token, AccessData])
-    
+
     const getUserMetadata = useCallback(async () => {
         setLoadingProgress(30); // Set loading progress to 30%
         const domain = "dev-xgi1ni6k23x87bgd.us.auth0.com";
         const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user['sub']}`;
-        
+
         const metadataResponse = await fetch(userDetailsByIdUrl, {
             headers: {
                 Authorization: `Bearer ${Token}`,
@@ -88,13 +102,13 @@ export default function ToDo() {
 
         setLoadingProgress(100); // Set loading progress to 100% when data is loaded
     }, [Token, user]);
-    
-    socket.once('token', (e)=>{
+
+    socket.once('token', (e) => {
         setToken(e['access_token'])
     })
-    
-    useEffect(()=>{
-        if (user && Token && isAuthenticated){
+
+    useEffect(() => {
+        if (user && Token && isAuthenticated) {
             getUserMetadata();
         }
     }, [user, Token, isAuthenticated, getUserMetadata])
@@ -114,11 +128,13 @@ export default function ToDo() {
                         key={task.id}
                         unique_key={task.id}
                         title={task.title}
-                        isChecked={task.isChecked} 
+                        isChecked={task.isChecked}
                         delete_func={handleDelete}
                         updateFunc={handleModification}
+                        handleCheckboxChange={() => handleCheckboxChange(task.id)} // Pass handleCheckboxChange function
                     />
                 ))}
+
 
 
 
