@@ -82,7 +82,6 @@ export default function ToDo() {
         setTasks(user_metadata['tasks'])
     }, [Token ,user])
     
-    
     socket.once('token', (e)=>{
         setToken(e['access_token'])
     })
