@@ -19,6 +19,7 @@ export default function ToDo() {
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     useEffect(() => {
+        setAccessData(false)
         socket.emit('givetoken');
         if (!isAuthenticated){
         const storedTasks = JSON.parse(localStorage.getItem('tasks'));
