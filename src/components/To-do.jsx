@@ -64,6 +64,7 @@ export default function ToDo() {
     
     const UpdateUserMetadata = useCallback((updatedTasks)=>{
         if (isAuthenticated){
+            console.log("UpdatedTasks: ", updatedTasks)
             socket.emit("updateData", [user['sub'], Token, updatedTasks])
         }
     }, [isAuthenticated, user, Token])
