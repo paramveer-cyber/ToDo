@@ -4,6 +4,7 @@ import '../App.css';
 import { useAuthFunctions } from '../server/auth';
 import TaskCard from './task_card';
 import io from 'socket.io-client';
+import Loader from './Loading_Bar';  // Import the Loader component
 
 const socket = io("https://charm-numerous-farmhouse.glitch.me/", { transports: ["websocket"] });
 
@@ -13,6 +14,7 @@ export default function ToDo() {
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
     const [Token, setToken] = useState("");
+    const [loadingProgress, setLoadingProgress] = useState(0); // State to manage loading progress
     const [AccessData, setAccessData] = useState(false);
     const date = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -70,6 +72,7 @@ export default function ToDo() {
     }, [isAuthenticated, user, Token, AccessData])
     
     const getUserMetadata = useCallback(async () => {
+        setLoadingProgress(30); // Set loading progress to 30%
         const domain = "dev-xgi1ni6k23x87bgd.us.auth0.com";
         const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user['sub']}`;
         
@@ -78,10 +81,13 @@ export default function ToDo() {
                 Authorization: `Bearer ${Token}`,
             },
         });
+
         const { user_metadata } = await metadataResponse.json();
-        setTasks(user_metadata['tasks'])
-        setAccessData(true)
-    }, [Token ,user])
+        setTasks(user_metadata['tasks']);
+        setAccessData(true);
+
+        setLoadingProgress(100); // Set loading progress to 100% when data is loaded
+    }, [Token, user]);
     
     socket.once('token', (e)=>{
         setToken(e['access_token'])
@@ -100,6 +106,7 @@ export default function ToDo() {
 
     return (
         <div className='container my-3'>
+            <Loader progress={loadingProgress} progressfunc={setLoadingProgress} /> {/* Pass loading progress to Loader component */}
             <h1 className='h1'>{`${days[date.getDay()]}`}, <span className='date'>{`${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`}</span></h1>
             <div className="main_content">
                 {tasks.map((task) => (
