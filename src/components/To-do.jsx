@@ -25,7 +25,7 @@ export default function ToDo() {
         if (storedTasks && storedTasks.length > 0) {
             setTasks(storedTasks);
         }}
-    }, []);
+    }, [isAuthenticated]);
 
     useEffect(() => {
         UpdateUserMetadata(tasks)
@@ -90,7 +90,7 @@ export default function ToDo() {
         if (user && Token && isAuthenticated){
             getUserMetadata();
         }
-    }, [user, Token])
+    }, [user, Token, isAuthenticated])
 
     socket.once('token', (e)=>{
         setToken(e['access_token'])
