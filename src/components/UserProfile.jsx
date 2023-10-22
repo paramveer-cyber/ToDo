@@ -38,9 +38,6 @@ const UserProfile = () => {
                             <button className="btn btn-danger w-100 my-2" onClick={handlingLogout}>
                                 Logout
                             </button>
-                            <button className="btn btn-danger w-100 my-2" >
-                                Fetch Data
-                            </button>
                         </div>
                     </div>
                 </div>
