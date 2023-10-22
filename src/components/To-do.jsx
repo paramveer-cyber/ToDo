@@ -13,10 +13,10 @@ export default function ToDo() {
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
     const [Token, setToken] = useState("");
+    const [AccessData, setAccessData] = useState(false);
     const date = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
 
     useEffect(() => {
         socket.emit('givetoken');
@@ -26,7 +26,6 @@ export default function ToDo() {
             setTasks(storedTasks);
         }}
     }, [isAuthenticated]);
-
     
     const handleInputChange = (event) => {
         setNewTask(event.target.value);
@@ -63,15 +62,14 @@ export default function ToDo() {
     };
     
     const UpdateUserMetadata = useCallback((updatedTasks)=>{
-        if (isAuthenticated){
+        if (isAuthenticated && AccessData){
             console.log("UpdatedTasks: ", updatedTasks)
             socket.emit("updateData", [user['sub'], Token, updatedTasks])
         }
-    }, [isAuthenticated, user, Token])
+    }, [isAuthenticated, user, Token, AccessData])
     
     const getUserMetadata = useCallback(async () => {
         const domain = "dev-xgi1ni6k23x87bgd.us.auth0.com";
-        console.log(Token)
         const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user['sub']}`;
         
         const metadataResponse = await fetch(userDetailsByIdUrl, {
@@ -81,6 +79,7 @@ export default function ToDo() {
         });
         const { user_metadata } = await metadataResponse.json();
         setTasks(user_metadata['tasks'])
+        setAccessData(true)
     }, [Token ,user])
     
     socket.once('token', (e)=>{
@@ -97,6 +96,7 @@ export default function ToDo() {
         UpdateUserMetadata(tasks)
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }, [tasks, UpdateUserMetadata]);
+
     return (
         <div className='container my-3'>
             <h1 className='h1'>{`${days[date.getDay()]}`}, <span className='date'>{`${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`}</span></h1>
