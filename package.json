@@ -90,6 +90,14 @@
     "workbox-webpack-plugin": "^6.4.1",
     "ws": "^8.14.2"
   },
+  "devDependencies": {
+    "@rollup/plugin-terser": "^x.x.x",
+    "@babel/plugin-transform-nullish-coalescing-operator": "^x.x.x",
+    "@babel/plugin-transform-numeric-separator": "^x.x.x",
+    "@babel/plugin-transform-private-methods": "^x.x.x",
+    "@babel/plugin-transform-optional-chaining": "^x.x.x",
+    "@babel/plugin-transform-class-properties": "^x.x.x"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

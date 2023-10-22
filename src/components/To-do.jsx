@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuid } from 'uuid';
 import '../App.css';
 import { useAuthFunctions } from '../server/auth';
@@ -27,15 +27,11 @@ export default function ToDo() {
         }}
     }, [isAuthenticated]);
 
-    useEffect(() => {
-        UpdateUserMetadata(tasks)
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    }, [tasks]);
-
+    
     const handleInputChange = (event) => {
         setNewTask(event.target.value);
     };
-
+    
     const handleKeyPress = (event) => {
         if (event.key === 'Enter' && newTask.trim() !== '') {
             const newTaskObject = {
@@ -45,14 +41,14 @@ export default function ToDo() {
             setTasks([...tasks, newTaskObject]);
             setNewTask("");
         }
-
+        
     };
-
+    
     const handleDelete = (uniqueKey) => {
         const updatedTasks = tasks.filter((task) => task.id !== uniqueKey);
         setTasks(updatedTasks);
     };
-
+    
     const handleModification = (key, m_title) => {
         setTasks(prevTasks => {
             const updatedTasks = prevTasks.map((task, index) => {
@@ -66,36 +62,41 @@ export default function ToDo() {
         });
     };
     
-    const UpdateUserMetadata = (updatedTasks)=>{
+    const UpdateUserMetadata = useCallback((updatedTasks)=>{
         if (isAuthenticated){
             socket.emit("updateData", [user['sub'], Token, updatedTasks])
         }
-    }
-
-    const getUserMetadata = async () => {
-        const domain = "dev-xgi1ni6k23x87bgd.us.auth0.com";
+    }, [isAuthenticated, user, Token])
     
+    const getUserMetadata = useCallback(async () => {
+        const domain = "dev-xgi1ni6k23x87bgd.us.auth0.com";
+        
         const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user['sub']}`;
         
         const metadataResponse = await fetch(userDetailsByIdUrl, {
             headers: {
-            Authorization: `Bearer ${Token}`,
+                Authorization: `Bearer ${Token}`,
             },
         });
         const { user_metadata } = await metadataResponse.json();
         setTasks(user_metadata['tasks'])
-    };
-
+    }, [Token ,user])
+    
+    
+    socket.once('token', (e)=>{
+        setToken(e['access_token'])
+    })
+    
     useEffect(()=>{
         if (user && Token && isAuthenticated){
             getUserMetadata();
         }
-    }, [user, Token, isAuthenticated])
+    }, [user, Token, isAuthenticated, getUserMetadata])
 
-    socket.once('token', (e)=>{
-        setToken(e['access_token'])
-    })
-
+    useEffect(() => {
+        UpdateUserMetadata(tasks)
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }, [tasks, UpdateUserMetadata]);
     return (
         <div className='container my-3'>
             <h1 className='h1'>{`${days[date.getDay()]}`}, <span className='date'>{`${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`}</span></h1>
