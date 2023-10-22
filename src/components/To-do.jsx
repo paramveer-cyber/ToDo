@@ -70,7 +70,7 @@ export default function ToDo() {
     
     const getUserMetadata = useCallback(async () => {
         const domain = "dev-xgi1ni6k23x87bgd.us.auth0.com";
-        
+        console.log(Token)
         const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user['sub']}`;
         
         const metadataResponse = await fetch(userDetailsByIdUrl, {
