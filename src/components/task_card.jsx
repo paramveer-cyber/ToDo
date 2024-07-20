@@ -38,7 +38,6 @@ export default function TaskCard(props) {
                     onChange={props.handleCheckboxChange} // Handle checkbox change event
                 />
 
-
                 <label className={'btn btn-outline-success'} htmlFor={`btn-check-outlined${props.unique_key}`}>✓</label>
                 {isEditing ? (
                     <input

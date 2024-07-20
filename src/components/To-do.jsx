@@ -65,7 +65,6 @@ export default function ToDo() {
         });
     };
 
-
     const handleCheckboxChange = (uniqueKey) => {
         setTasks((prevTasks) => {
             const updatedTasks = prevTasks.map((task) => {
@@ -122,6 +121,18 @@ export default function ToDo() {
         <div className='container my-3'>
             <Loader progress={loadingProgress} progressfunc={setLoadingProgress} /> {/* Pass loading progress to Loader component */}
             <h1 className='h1'>{`${days[date.getDay()]}`}, <span className='date'>{`${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`}</span></h1>
+            <div className='task_card d-flex align-items-center'>
+                <input
+                    type="text"
+                    id="input_field"
+                    className="task_input form-control"
+                    placeholder="Enter Tasks you want to accomplish..."
+                    aria-label="Task"
+                    value={newTask}
+                    onChange={handleInputChange}
+                    onKeyPress={handleKeyPress}
+                />
+            </div>
             <div className="main_content">
                 {tasks.map((task) => (
                     <TaskCard
@@ -134,22 +145,6 @@ export default function ToDo() {
                         handleCheckboxChange={() => handleCheckboxChange(task.id)} // Pass handleCheckboxChange function
                     />
                 ))}
-
-
-
-
-            </div>
-            <div className='task_card d-flex align-items-center'>
-                <input
-                    type="text"
-                    id="input_field"
-                    className="task_input form-control"
-                    placeholder="Enter Tasks you want to accomplish..."
-                    aria-label="Task"
-                    value={newTask}
-                    onChange={handleInputChange}
-                    onKeyPress={handleKeyPress}
-                />
             </div>
         </div>
     );
