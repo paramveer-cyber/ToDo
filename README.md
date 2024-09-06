@@ -1,9 +1,9 @@
 # Todo List Website
 
 Hi this is just a normal todo list website which I assume I will be using to make myself more productive
-I guesss... .\
+I guesss... 
 
-Open [Link]("https://todo-7gq.pages.dev/")
+👉 [View the Todo List Website](https://todo-7gq.pages.dev/)
 
 # Create React App
 
@@ -16,7 +16,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:3000](http://localhost:3000) to view it Locally.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
