@@ -6,7 +6,7 @@ import TaskCard from './task_card';
 import io from 'socket.io-client';
 import Loader from './Loading_Bar';  // Import the Loader component
 
-const socket = io("https://charm-numerous-farmhouse.glitch.me/", { transports: ["websocket"] });
+const socket = io("https://todo-backend-uyin.onrender.com", { transports: ["websocket"] });
 
 
 export default function ToDo() {
