@@ -6,8 +6,14 @@ var tokenOptions = {
     method: 'POST',
     url: 'https://dev-xgi1ni6k23x87bgd.us.auth0.com/oauth/token',
     headers: { 'content-type': 'application/json' },
-    body: '{"client_id":"MCYR9AtKszYPkXeWeFGupowMgulfHdVw","client_secret":"356hVGmpqAH5tsRLiD16arUMnVrA7ufAAKwyIYxORHYrLSzCM6nr9BpBqonXNZTn","audience":"https://dev-xgi1ni6k23x87bgd.us.auth0.com/api/v2/","grant_type":"client_credentials"}'
+    body: JSON.stringify({
+        client_id: process.env.AUTH0_CLIENT_ID,
+        client_secret: process.env.AUTH0_CLIENT_SECRET,
+        audience: process.env.AUTH0_AUDIENCE,
+        grant_type: "client_credentials"
+    })
 };
+
 
 server.on('connection', (socket) => {
     console.log('Client connected');
