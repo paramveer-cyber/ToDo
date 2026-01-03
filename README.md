@@ -1,22 +1,59 @@
-# Todo List Website
+# 📝 Real-Time ToDo App
 
-Hi this is just a normal todo list website which I assume I will be using to make myself more productive
-I guesss... 
+A React-based ToDo application with authentication and real-time capabilities, built to practice frontend architecture, state management, and socket-based communication.
 
-👉 [View the Todo List Website](https://todo-7gq.pages.dev/)
+## ✨ Features
+- User authentication using **Auth0**
+- Add tasks using keyboard input (Enter key)
+- Mark tasks as completed
+- Delete tasks
+- Unique task IDs generated using UUID
+- Real-time socket connection with backend
+- Loading state handling
+- Client-side routing with protected routes
+- Error handling with a custom 404 page
 
-# Create React App
+## 🛠 Tech Stack
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Frontend
+- React
+- JavaScript (ES6+)
+- React Router
+- Socket.io-client
+- Auth0 (authentication)
+- UUID
 
-## Available Scripts
+### Backend
+- Node.js
+- Socket.io
+- Auth0 Management API
 
-In the project directory, you can run:
+### Styling
+- CSS (custom styling)
 
-### `npm start`
+## 📂 Project Structure
+- `components/` – UI components such as task cards, navbar, loader, and error pages
+- `server/` – Authentication logic and socket-based backend
+- `assets/` – Images and icons
+- `App.js` – Routing and app-level layout
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it Locally.
+## ⚙️ How It Works
+- Users authenticate using Auth0 before accessing the app
+- Tasks are managed using React state
+- Each task is assigned a unique ID
+- Socket.io establishes a persistent connection with the backend
+- The backend handles authentication token generation and socket events
+- UI updates dynamically without page reloads
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js
+- npm
+
+### Installation
+```bash
+git clone https://github.com/your-username/todo-app.git
+cd todo-app
+npm install
+npm start
